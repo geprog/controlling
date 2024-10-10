@@ -1,3 +1,3 @@
 <template>
-    <div>hallo</div>
+    <div>placeholder</div>
 </template>
