@@ -15,7 +15,7 @@ const date = ref(new Date())
       <DatePicker v-model="date" is-required @close="close" />
     </template>
   </UPopover>
-  <FileDropzone class="mt-4"/>
-        <UButton class="mt-4 hover:bg-gray-800" size="md" color="black" icon="i-heroicons-x-mark" label="Abrechen" @click="navigateTo('/collection')" />
+  <FileDropzone class="mt-4" backend-url="/api/bwa"/>
+  <UButton class="mt-4 hover:bg-gray-800" size="md" color="black" icon="i-heroicons-x-mark" label="Abrechen" @click="navigateTo('/collection')" />
     </div>
 </template>
