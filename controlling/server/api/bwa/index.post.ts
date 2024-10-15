@@ -22,5 +22,3 @@ export default defineEventHandler(async (event) => {
     console.log("success")
   })
 });
-
-// TODO filename mit Datum als key speichern...

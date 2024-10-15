@@ -53,24 +53,6 @@
         navigateTo("/collection")
       })
       
-//       const dzDefault = dropRef.value.querySelector('.dz-default')
-//       if (dzDefault) {
-//         dzDefault.innerHTML = `
-//   <div style="display: flex; justify-content: center;">
-//     <i class="bi bi-cloud-arrow-up-fill" style="font-size: 5rem;"></i>
-//   </div>
-//   <p style="text-align: center; margin: 0;"><strong>Dateien zum Hochladen hierher ziehen und ablegen</strong></p>
-// `
-//       }
     }
   })
   </script>
-  
-  <style scoped>
-  .custom-dropzone {
-    border-style: dashed;
-    border-width: 3px;
-    padding: 20px;
-    color: rgb(114, 114, 114);
-  }
-  </style>
