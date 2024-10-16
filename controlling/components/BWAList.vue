@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data:bwas } = useFetch("/api/bwa");
+const { data:bwas } = await useFetch("/api/bwa");
 
 </script>
 

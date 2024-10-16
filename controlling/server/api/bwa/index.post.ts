@@ -6,7 +6,6 @@ export default defineEventHandler(async (event) => {
     throw Error("formData not found");
   }
 
-
   const { filename, data } = formData[0];
 
   const storage = useStorage("data");
