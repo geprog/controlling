@@ -12,6 +12,9 @@ export default defineNuxtConfig({
         driver: 'fs',
         base: './data/db'
       }
+    },
+    externals: {
+      inline: ['xlsx']
     }
   }
 })
