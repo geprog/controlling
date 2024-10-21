@@ -22,8 +22,7 @@
         @click="navigateTo('/bwa')"
       /> -->
     </div>
-
-    <div class="flex flex-row justify-center p-4 max-w-[1024px] m-auto">
+    <div class="flex justify-center p-4 max-w-[1024px] m-auto">
       <BWAList />
     </div>
   </div>
