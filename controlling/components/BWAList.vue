@@ -1,7 +1,5 @@
 <script setup lang="ts">
 const { data:bwas } = await useFetch("/api/bwa");
-// v-for="(bwa, i) in bwas" :key="i" class="w-[256px] h-[68px] hover:cursor-pointer hover:bg-gray-50 text-lg truncate" @click="navigateTo(`/bwa/${ bwa }`)" >{{ bwa }}
-
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div ref="dropRef" class="dropzone" />
+      <div ref="dropRef" class="dropzone" :date />
     </div>
   </template>
   
@@ -20,7 +20,8 @@
     backendUrl: {
       type: String,
       default: 'https://backendUrl/uploadFile/'
-    }
+    },
+    date: Date,
   })
   
   const dropRef = ref(null)

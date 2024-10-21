@@ -1,9 +1,9 @@
 <script setup lang="ts">
-// wird nicht genutzt...
+// nicht genutzt
 </script>
 
 <template>
  <div>
-    <UTable />
+ <h1>aa</h1>
  </div>
 </template>

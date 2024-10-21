@@ -7,7 +7,7 @@ const date = ref(new Date())
 </script>
 
 <template>
-    <div class="p-4 w-[512px] h-screen m-auto flex flex-col items-center">
+    <div class="p-4 w-[512px] m-auto flex flex-col items-center">
       <p class="text-center">Hier kannst du eine neue BWA hochladen (nur Excel-Dateien). Gib den Monat ein, für die du die BWA hochladen möchtest.</p>
         
       <UPopover class="mt-4" :popper="{ placement: 'bottom-start' }">
@@ -18,7 +18,7 @@ const date = ref(new Date())
           </template>
       </UPopover>
 
-      <FileDropzone class="mt-4 border border-dashed border-gray-900 p-2" backend-url="/api/bwa"/>
+      <FileDropzone class="mt-4 border border-dashed border-gray-900 p-2" backend-url="/api/bwa" :date/>
       <UButton class="mt-4 hover:bg-gray-800" size="md" color="black" icon="i-heroicons-x-mark" label="Abrechen" @click="navigateTo('/collection')" />
     </div>
 </template>
