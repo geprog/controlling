@@ -6,14 +6,17 @@ type bwaObject = {[key: string]: string | number}[]
 
 const structuredBWA = bwa.value as bwaObject; 
 
-const rows = structuredBWA.map((el) => {
+const rows = structuredBWA ? 
+structuredBWA
+.map((el) => {
   const x = Object.entries(el).map(ell => {
     const y = ell[0]
     const z = ell[1]
     return { [y]: z }
   })
     return x
-})
+}) : []
+
 const tableData = rows.map(itemarry => itemarry.reduce((acc, curretobject) => ({...acc, ...curretobject}), {}))
 </script>
 
