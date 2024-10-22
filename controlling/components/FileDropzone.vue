@@ -1,12 +1,13 @@
 <template>
     <div>
-      <div ref="dropRef" class="dropzone" :date />
+      <div ref="dropRef" class="dropzone"/>
     </div>
-  </template>
+</template>
   
   <script setup>
   import { ref, onMounted } from 'vue'
   import { Dropzone } from "@deltablot/dropzone"
+  import { format } from 'date-fns';
   
   const props = defineProps({
     paramName: {
@@ -19,7 +20,7 @@
     },
     backendUrl: {
       type: String,
-      default: 'https://backendUrl/uploadFile/'
+      default: '/api'
     },
     date: Date,
   })
@@ -41,19 +42,17 @@
         </div>
       `
 
+  const fileDate = format(props.date, "dd MMMM yyyy")
+
   onMounted(() => {
     if (dropRef.value !== null) {
       new Dropzone(dropRef.value, {
         url: props.backendUrl,
         method: 'POST',
-        paramName: props.paramName,
         acceptedFiles: ".xlsx",
-        previewTemplate: customPreview
+        previewTemplate: customPreview,
+        renameFile: () => fileDate + '.xlsx',
       })
-      .on("success", () => {
-        navigateTo("/collection")
-      })
-      
     }
   })
   </script>

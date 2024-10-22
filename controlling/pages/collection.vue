@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen">
+  <div>
     <div class="p-4 w-[512px] m-auto flex flex-col items-center">
       <p class="text-center">
         Hier findest du alle Betriebswirtschaftlichen Auswertungen und kannst

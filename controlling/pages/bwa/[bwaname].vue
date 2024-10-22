@@ -20,10 +20,13 @@ const tableData = rows.map(itemarry => itemarry.reduce((acc, curretobject) => ({
 <template>
   <div class="text-center">
     <div class="p-4">
-      <p>Auswertung für [Datum]<br>{{ route.params.bwaname }}</p>
+      <p>Auswertung für<br>{{ 
+        route.params.bwaname.toString().replace(/^\d{2}_|\.xlsx/g, "")
+        .replace(/_/g, " ") 
+        }}</p>
       <UButton class="mt-4" color="white" size="md" label="Zurück zur BWA Übersicht" icon="i-heroicons-arrow-left" @click="navigateTo('/collection')" />
     </div>
-    <div v-if="bwa" class="pb-20">
+    <div v-if="bwa" class="pb-15">
       <table class="m-auto">
         <thead>
           <tr>

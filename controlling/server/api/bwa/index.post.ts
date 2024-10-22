@@ -26,7 +26,5 @@ export default defineEventHandler(async (event) => {
   const ws = wb.Sheets[wb.SheetNames[0]];
   const json = utils.sheet_to_json(ws);
 
-  await storage.setItem(fileNameReplaced, json).then(() => {
-    console.log("success")
-  })
+  await storage.setItem(fileNameReplaced, json)
 });
