@@ -1,39 +1,31 @@
-
-// wird nicht genutzt...
-
 <script setup lang="ts">
-import { DatePicker as VCalendarDatePicker } from 'v-calendar'
-import type { DatePickerDate, DatePickerRangeObject } from 'v-calendar/dist/types/src/use/datePicker.d.ts'
-import 'v-calendar/dist/style.css'
+import { format } from 'date-fns';
+import { de } from 'date-fns/locale';
+import { DatePicker as VCalendarDatePicker } from './../node_modules/v-calendar';
+import 'v-calendar/dist/style.css';
 
-const props = defineProps({
-  modelValue: {
-    type: [Date, Object] as PropType<DatePickerDate | DatePickerRangeObject | null>,
-    default: null
-  }
-})
+const date = defineModel<Date>({ default: new Date() })
 
-const emit = defineEmits(['update:model-value', 'close'])
-
-const date = computed({
-  get: () => props.modelValue,
-  set: (value) => {
-    emit('update:model-value', value)
-    emit('close')
-  }
-})
-
-const attrs = {
-  transparent: true,
-  borderless: true,
-  color: 'gray',
-  'is-dark': { selector: 'html', darkClass: 'dark' },
-  'first-day-of-week': 2,
+const handleDateSelect = ({ close }: { close: () => void }) => {
+  close()
 }
 </script>
 
 <template>
-  <VCalendarDatePicker v-if="date && (typeof date === 'object')" v-model="date"  v-bind="{ ...attrs, ...$attrs }" />
-  <VCalendarDatePicker v-else v-model="date" v-bind="{ ...attrs, ...$attrs }" />
-</template>
+  <UPopover class="mt-4" :popper="{ placement: 'bottom-start' }">
+    <UButton 
+      icon="i-heroicons-calendar-days-20-solid" 
+      color="black" 
+      :label="format(date, 'MMM yyy', { locale: de })" 
+    />
 
+    <template #panel="{ close }">
+      <VCalendarDatePicker 
+        v-model="date" 
+        is-required 
+        color="gray" 
+        @update:model-value="handleDateSelect({ close })"
+      />
+    </template>
+  </UPopover>
+</template>
