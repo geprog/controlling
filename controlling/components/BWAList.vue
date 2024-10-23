@@ -1,5 +1,26 @@
 <script setup lang="ts">
 const { data:bwas } = await useFetch("/api/bwa");
+
+const monthMap: Record<string, number> = {
+  'Januar': 0, 
+  'Februar': 1,
+  'März': 2,
+  'April': 3,
+  'Mai': 4,
+  'Juni': 5,
+  'Juli': 6,
+  'August': 7,
+  'September': 8,
+  'Oktober': 9,
+  'November': 10,
+  'Dezember': 11
+};
+
+function convertToDate(fileName: string) {
+    const [day, month, year] = fileName.split('_');
+    return new Date(parseInt(year.replace('.xlsx', '')), monthMap[month], parseInt(day))
+}
+bwas.value?.sort((a, b) => convertToDate(a).getTime() - convertToDate(b).getTime())
 </script>
 
 <template>
