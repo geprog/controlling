@@ -51,7 +51,7 @@ onMounted(() => {
       errorMessage.value = error.message;
     });
     dropzone.on("success", () => {
-      navigateTo("/collection")
+      navigateTo("/bwa/collection")
     });
   }
 });

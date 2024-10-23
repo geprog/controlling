@@ -20,7 +20,7 @@ function convertToDate(fileName: string) {
     const [day, month, year] = fileName.split('_');
     return new Date(parseInt(year.replace('.xlsx', '')), monthMap[month], parseInt(day))
 }
-bwas.value?.sort((a, b) => convertToDate(a).getTime() - convertToDate(b).getTime())
+bwas.value?.sort((a, b) => convertToDate(a.replace(/ae/, "ä")).getTime() - convertToDate(b.replace(/ae/, "ä")).getTime())
 </script>
 
 <template>
@@ -29,6 +29,7 @@ bwas.value?.sort((a, b) => convertToDate(a).getTime() - convertToDate(b).getTime
             <p class=" truncate p-5">{{ 
                 bwa.replace(/^\d{2}_|\.xlsx/g, "")
                 .replace(/_/g, " ")
+                .replace(/ae/, "ä")
                 }}</p>
         </div>
     </div>

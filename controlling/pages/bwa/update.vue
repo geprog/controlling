@@ -31,7 +31,7 @@ watch(date, () => {
     <FileDropzone class="mt-4 border border-dashed border-gray-900 p-2" backend-url="/api/bwa" :date />
     <UButton
 class="mt-4 hover:bg-gray-800" size="md" color="black" icon="i-heroicons-x-mark" label="Abbrechen"
-      @click="navigateTo('/collection')" />
+      @click="navigateTo('/bwa/collection')" />
   </div>
 </template>
 

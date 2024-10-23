@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   if (!filename) {
     throw Error("filename not found");
   }
-  const fileNameReplaced = filename?.replace(/\s/g, "_")
+  const fileNameReplaced = filename?.replace(/\s/g, "_").replace(/ä/, "ae")
 
   const storage = useStorage("data");
 
