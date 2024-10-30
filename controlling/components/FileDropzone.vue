@@ -8,23 +8,16 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { Dropzone } from "@deltablot/dropzone";
-import { format } from "date-fns";
-import { de } from 'date-fns/locale';
 
 const props = defineProps({
-  paramName: {
-    type: String,
-    default: "file",
-  },
-  token: {
-    type: String,
-    default: "",
-  },
   backendUrl: {
     type: String,
     default: "/api",
   },
-  date: Date,
+  date: {
+    type: String,
+    default: undefined
+  },
 });
 
 const dropRef = ref(null);
@@ -45,7 +38,7 @@ onMounted(() => {
       method: "POST",
       acceptedFiles: ".xlsx",
       previewTemplate: customPreview.value,
-      renameFile: () => format(props.date, "dd MMMM yyyy", { locale: de }) + ".xlsx",
+      renameFile: () => {return props.date ? props.date + ".xlsx" : ""},
     });
     dropzone.on("error", (file, error) => {
       errorMessage.value = error.message;

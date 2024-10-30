@@ -1,3 +1,5 @@
 <template>
-    <div>placeholder</div>
+    <div class="hidden">
+        placeholder
+    </div>
 </template>

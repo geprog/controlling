@@ -17,10 +17,11 @@ const monthMap: Record<string, number> = {
 };
 
 function convertToDate(fileName: string) {
-    const [day, month, year] = fileName.split('_');
-    return new Date(parseInt(year.replace('.xlsx', '')), monthMap[month], parseInt(day))
+    const [month, year] = fileName.split('_');
+    return new Date(parseInt(year.replace('.xlsx', '')), monthMap[month.replace(/ae/, "ä")])
 }
-bwas.value?.sort((a, b) => convertToDate(a.replace(/ae/, "ä")).getTime() - convertToDate(b.replace(/ae/, "ä")).getTime())
+
+bwas.value?.sort((a, b) => convertToDate(a).getTime() - convertToDate(b).getTime())
 </script>
 
 <template>

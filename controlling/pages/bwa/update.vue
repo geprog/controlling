@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { format } from 'date-fns';
-import { de } from 'date-fns/locale';
 
-const date = ref<Date>(new Date());
+const date = ref<string>();
 const isBlinking = ref<boolean>(false);
 
 watch(date, () => {
@@ -23,9 +21,9 @@ watch(date, () => {
 
     <DatePicker v-model="date" />
 
-    <div class="pt-4 font-bold">
+    <div v-if="date" class="pt-4 font-bold">
       <p :class="{ blink: isBlinking }">
-        Deine Datei wird in "{{ format(date, 'dd MMMM yyy', { locale: de }).replace(/\s/g, "_") }}.xlsx" umbenannt
+        Deine Datei wird in "{{ date.replace(/\s/, '_') }}.xlsx" umbenannt
       </p>
     </div>
     <FileDropzone class="mt-4 border border-dashed border-gray-900 p-2" backend-url="/api/bwa" :date />

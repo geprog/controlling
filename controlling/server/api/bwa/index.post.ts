@@ -4,20 +4,20 @@ export default defineEventHandler(async (event) => {
   const formData = await readMultipartFormData(event);
 
   if (!formData) {
-    throw Error("formData not found");
+    throw Error("Die Hochgeladene Datei konnte nicht gelesen werden");
   }
 
   const { filename, data } = formData[0];
   
   if (!filename) {
-    throw Error("filename not found");
+    throw Error("Bitte wähle ein Datum aus");
   }
   const fileNameReplaced = filename?.replace(/\s/g, "_").replace(/ä/, "ae")
 
   const storage = useStorage("data");
 
   if (await storage.hasItem(fileNameReplaced)) {
-    throw Error("BWA already exists")
+    throw Error("BWA existiert bereits")
   }
 
   // Buffer Data to Json
