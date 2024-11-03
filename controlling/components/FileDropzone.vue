@@ -2,7 +2,7 @@
   <div>
     <div
       ref="dropRef"
-      class="dropzone border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors cursor-pointer bg-gray-50 max-w-56 min-h-[120px] flex items-center justify-center"
+      class="dropzone border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors cursor-pointer bg-gray-50 max-w-56 min-h-[120px] flex flex-col items-center justify-center"
     >
       <div class="dz-message text-center">
         <p class="text-gray-600 mb-2">
@@ -31,24 +31,6 @@ const props = defineProps({
 
 const dropRef = ref(null);
 
-// INFO: kann in der previewTemplate option genutzt werden und ist ein weg den upload progress anzuzeigen
-
-// const customPreview = ref(`
-//   <div class="p-4 bg-white border rounded-lg shadow-sm mt-4">
-//      <div class="flex items-center justify-between mb-2">
-//        <span class="text-sm font-medium text-gray-700" data-dz-name></span>
-//        <div class="flex items-center">
-//          <span class="text-sm text-gray-500" data-dz-size></span>
-//        </div>
-//     </div>
-//      <div class="w-full bg-gray-200 rounded-full h-2.5">
-//      <div class="bg-blue-500 h-2.5 rounded-full transition-all"
-//          style="width: 0%" data-dz-uploadprogress>
-//        </div>
-//      </div>
-//    </div>
-//  `);
-
 const formattedFileName = computed(() => {
   if (props.date) {
     return props.date.replace(/\s/g, "_").replace(/ä/g, "ae") + ".xlsx";
@@ -63,7 +45,17 @@ onMounted(() => {
       method: "POST",
       maxFiles: 1,
       acceptedFiles: ".xlsx",
-      previewTemplate: "<div></div>",
+      previewTemplate: `
+        <div class="p-4 bg-white border rounded-lg">
+          <div class="mb-2 flex">
+            <span class="dz-name text-sm font-medium text-gray-700" data-dz-name></span>
+            <span class="dz-size text-sm text-gray-500 ml-2 flex" data-dz-size></span>
+          </div>
+          <div class="bg-gray-200 rounded-full h-2.5">
+            <div class="dz-uploadprogress bg-blue-500 h-2.5 rounded-full transition-all" data-dz-uploadprogress></div>
+          </div>
+        </div>
+      `,
       accept: function (
         file: { upload: { filename: string } },
         done: (error?: Error | string) => void
@@ -84,7 +76,10 @@ onMounted(() => {
     });
 
     dropzoneInstance.on("success", () => {
-      notificationService("BWA erfolgreich hochgeladen und angelegt", true);
+      notificationService(
+        "BWA erfolgreich hochgeladen und angelegt, du wurdest automatisch weitergeleitet",
+        true
+      );
       navigateTo(`${formattedFileName.value}`);
     });
   }
@@ -109,7 +104,9 @@ function notificationService(message: string, type: boolean) {
   } else {
     toast.add({
       title: "Fehler",
-      description: message,
+      description: message
+        ? message
+        : "Ein unerwarteter Fehler ist aufgetreten, bitte melde, wenn möglich wie dieser Fehler aufgetreten ist",
       icon: "i-heroicons-exclamation-triangle",
       timeout: 10000,
       ui: {
@@ -128,5 +125,9 @@ function notificationService(message: string, type: boolean) {
 .dropzone.dz-drag-hover {
   border-color: rgb(59 130 246);
   background-color: rgb(239 246 255);
+}
+
+.dropzone.dz-started .dz-message {
+  display: none;
 }
 </style>

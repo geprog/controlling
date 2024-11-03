@@ -43,7 +43,9 @@ function notificationService(message: string, type: boolean) {
   } else {
     toast.add({
       title: "Fehler",
-      description: message,
+      description: message
+        ? message
+        : "Ein unerwarteter Fehler ist aufgetreten, bitte melde, wenn möglich wie dieser Fehler aufgetreten ist",
       icon: "i-heroicons-exclamation-triangle",
       timeout: 10000,
       ui: {
@@ -66,7 +68,7 @@ async function deleteFile() {
     notificationService(response.message, response.success);
   } else {
     notificationService(
-      "Etwas unerwartetes ist passiert, bitte versuchen Sie es erneut oder laden Sie die Seite neu",
+      "Ein unerwarteter Fehler ist aufgetreten, bitte melde, wenn möglich wie dieser Fehler aufgetreten ist",
       false
     );
   }
