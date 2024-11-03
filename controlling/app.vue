@@ -2,13 +2,14 @@
   <div>
     <NuxtLayout />
     <div>
-    <NuxtPage />
+      <NuxtPage />
     </div>
+    <UNotifications />
   </div>
 </template>
 
 <style>
 body {
- background-color: #F3F4F6;
+  background-color: #f3f4f6;
 }
 </style>

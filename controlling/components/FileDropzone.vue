@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center">
+  <div>
     <div
       ref="dropRef"
       class="dropzone border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors cursor-pointer bg-gray-50 max-w-56 min-h-[120px] flex items-center justify-center"
@@ -10,14 +10,6 @@
         </p>
         <p class="text-sm text-gray-500">Nur .xlsx Dateien erlaubt</p>
       </div>
-    </div>
-    <div
-      v-if="errorMessage"
-      class="mt-4 p-4 bg-red-50 border border-red-200 rounded-md"
-    >
-      <p class="text-red-600 font-medium text-center">
-        Fehler: {{ errorMessage }}
-      </p>
     </div>
   </div>
 </template>
@@ -38,7 +30,6 @@ const props = defineProps({
 });
 
 const dropRef = ref(null);
-const errorMessage = ref("");
 
 // INFO: kann in der previewTemplate option genutzt werden und ist ein weg den upload progress anzuzeigen
 
@@ -89,14 +80,48 @@ onMounted(() => {
 
     dropzoneInstance.on("error", (file: object, error: { message: string }) => {
       dropzoneInstance.removeFile(file);
-      errorMessage.value = error.message;
+      notificationService(error.message, false);
     });
 
     dropzoneInstance.on("success", () => {
+      notificationService("BWA erfolgreich hochgeladen und angelegt", true);
       navigateTo(`${formattedFileName.value}`);
     });
   }
 });
+
+const toast = useToast();
+function notificationService(message: string, type: boolean) {
+  if (type) {
+    toast.add({
+      title: "Erfolg",
+      description: message,
+      icon: "i-heroicons-check-circle",
+      timeout: 10000,
+      ui: {
+        container: "bg-green-50 border border-green-200",
+        title: "font-medium text-green-800",
+        description: "text-green-700",
+        icon: { color: "bg-green-600" },
+        progress: { background: "bg-green-600" },
+      },
+    });
+  } else {
+    toast.add({
+      title: "Fehler",
+      description: message,
+      icon: "i-heroicons-exclamation-triangle",
+      timeout: 10000,
+      ui: {
+        container: "bg-red-50 border border-red-200",
+        title: "font-medium text-red-800",
+        description: "text-red-700",
+        icon: { color: "bg-red-600" },
+        progress: { background: "bg-red-600" },
+      },
+    });
+  }
+}
 </script>
 
 <style scoped>
