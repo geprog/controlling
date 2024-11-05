@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const date = defineModel<string>()
+const date = defineModel<string>();
 
 const datesArray: string[] = [];
 let year: number = new Date().getFullYear();
@@ -31,7 +31,7 @@ function formatMonthYear(month: number, year: number): string {
   return date.toLocaleDateString("de-DE", options);
 }
 // init
-loadMoreDates()
+loadMoreDates();
 </script>
 
 <template>
@@ -46,9 +46,12 @@ loadMoreDates()
         :options="datesArray"
         :ui="{ rounded: 'rounded-r-none' }"
       />
-      <UTooltip text="Mehr laden..." :popper="{ arrow: true, placement: 'right' }">
+      <UTooltip
+        text="Klicke hier, um das Vorjahr zu laden"
+        :popper="{ arrow: true, placement: 'right' }"
+      >
         <UButton
-        class="hover:bg-gray-800"
+          class="hover:bg-gray-800"
           color="black"
           icon="i-heroicons-arrow-path"
           :ui="{ rounded: 'rounded-l-none' }"
