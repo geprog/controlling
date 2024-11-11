@@ -146,7 +146,7 @@ async function deleteFile() {
     </div>
     <div v-if="bwa" class="pb-15">
       <div class="overflow-x-auto">
-        <table class="m-auto max-w-[763px] w-full border-collapse">
+        <!-- <table class="m-auto max-w-[763px] w-full border-collapse">
           <thead>
             <tr>
               <th
@@ -169,7 +169,9 @@ async function deleteFile() {
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
+        <!-- <USelectMenu class="m-auto max-w-[763px]" v-model="selected" multiple placeholder="Select columns" :options="tableData" /> -->
+        <UTable class="m-auto max-w-[763px]" :rows="tableData" />
       </div>
     </div>
     <p v-else class="pb-4 text-red-600 text-center">
