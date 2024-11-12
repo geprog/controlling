@@ -1,15 +1,165 @@
 <script setup lang="ts">
+import type { Bwa } from '~/server/types';
+
 const route = useRoute();
 const isOpen = ref(false);
 
 const { data: bwa, error } = await useFetch(`/api/bwa/${route.params.bwaname as string}`);
 
-const rows = bwa.value
-  ? Object.entries(bwa.value).map(([key, value]) => {
-    return [{ [key]: value }];
-  }) : [];
+const bwaData = bwa.value as Bwa;
 
-const columns = bwa.value ? Object.keys(bwa.value) : [];
+const totalOutput = bwaData.revenue + bwaData.inventoryChange + bwaData.ownWork;
+
+const grossYield = bwaData.revenue + bwaData.inventoryChange + bwaData.ownWork + bwaData.goodsPurchases;
+
+const operatingGrossYield = bwaData.revenue + bwaData.inventoryChange + bwaData.ownWork + bwaData.goodsPurchases + bwaData.otherIncome;
+
+const totalCosts = bwaData.personnelCosts + bwaData.facilityCosts + bwaData.operatingTaxes + bwaData.insuranceCosts + bwaData.specialCosts + bwaData.vehicleCosts + bwaData.travelCosts + bwaData.soldGoodsCosts + bwaData.depreciation + bwaData.maintenance + bwaData.otherCosts;
+
+const operatingResult = totalOutput - totalCosts;
+
+const nonOperatingExpenses = bwaData.interestExpense + bwaData.otherNeutralExpenses;
+
+const nonOperatingIncome = bwaData.interestIncome + bwaData.otherNeutralIncome + bwaData.calculatedImputedCosts;
+
+const earningsBeforeTaxes = operatingResult - nonOperatingExpenses + nonOperatingIncome;
+
+const earningsAfterTaxes = earningsBeforeTaxes + bwaData.incomeTaxes;
+
+const rows = [
+  {
+    name: "Bezeichnung",
+    value: bwaData.name,
+  },
+  {
+    name: "Umsatzerlöse",
+    value: bwaData.revenue,
+  },
+  {
+    name: "Bestandsveränderung FE/UE",
+    value: bwaData.inventoryChange,
+  },
+  {
+    name: "Aktivierte Eigenleistungen",
+    value: bwaData.ownWork,
+  },
+  {
+    name: "Gesamtleistung",
+    value: totalOutput
+  },
+  {
+    name: "Material-/Wareneinkauf",
+    value: bwaData.goodsPurchases,
+  },
+  {
+    name: "Rohertrag",
+    value: grossYield
+  },
+  {
+    name: "So. betr. Erlöse",
+    value: bwaData.otherIncome,
+  },
+  {
+    name: "Betrieblicher Rohertrag",
+    value: operatingGrossYield
+  },
+  {
+    name: "Personalkosten",
+    value: bwaData.personnelCosts,
+  },
+  {
+    name: "Raumkosten",
+    value: bwaData.facilityCosts,
+  },
+  {
+    name: "Betriebliche Steuern",
+    value: bwaData.operatingTaxes,
+  },
+  {
+    name: "Versicherungen/Beiträge",
+    value: bwaData.insuranceCosts,
+  },
+  {
+    name: "Besondere Kosten",
+    value: bwaData.specialCosts,
+  },
+  {
+    name: "Fahrzeugkosten (ohne Steuer)",
+    value: bwaData.vehicleCosts,
+  },
+  {
+    name: "Werbe-/Reisekosten",
+    value: bwaData.travelCosts,
+  },
+  {
+    name: "Kosten Warenabgabe",
+    value: bwaData.soldGoodsCosts,
+  },
+  {
+    name: "Abschreibungen",
+    value: bwaData.depreciation,
+  },
+  {
+    name: "Reparatur/Instandhaltung",
+    value: bwaData.maintenance,
+  },
+  {
+    name: "Sonstige Kosten",
+    value: bwaData.otherCosts,
+  },
+  {
+    name: "Gesamtkosten",
+    value: totalCosts
+  },
+  {
+    name: "Betriebsergebnis",
+    value: operatingResult,
+  },
+  {
+    name: "Zinsaufwand",
+    value: bwaData.interestExpense,
+  },
+  {
+    name: "Sonstiger neutraler Aufwand",
+    value: bwaData.otherNeutralExpenses,
+  },
+  {
+    name: "Neutraler Aufwand",
+    value: nonOperatingExpenses
+  },
+  {
+    name: "Zinserträge",
+    value: bwaData.interestIncome,
+  },
+  {
+    name: "Sonstiger neutraler Ertrag",
+    value: bwaData.otherNeutralIncome,
+  },
+  {
+    name: "Verrechnete kalk. Kosten",
+    value: bwaData.calculatedImputedCosts,
+  },
+  {
+    name: "Neutraler Ertrag",
+    value: nonOperatingIncome
+  },
+  {
+    name: "Kontenklasse unbesetzt",
+    value: bwaData.accountClassUnassigned,
+  },
+  {
+    name: "Ergebnis vor Steuern",
+    value: earningsBeforeTaxes
+  },
+  {
+    name: "Steuern Einkommen u. Ertrag",
+    value: bwaData.incomeTaxes
+  },
+  {
+    name: "Vorläufiges Ergebnis",
+    value: earningsAfterTaxes
+  }
+];
 
 const toast = useToast();
 function notificationService(message: string, type: boolean) {
@@ -48,9 +198,8 @@ function notificationService(message: string, type: boolean) {
 
 async function deleteFile() {
   if (bwa.value) {
-    const response = await $fetch("/api/bwa/index.delete", {
-      method: "POST",
-      body: { fileName: route.params.bwaname },
+    const response = await $fetch(`/api/bwa/${route.params.bwaname as string}`, {
+      method: "DELETE"
     });
     notificationService(response.message, response.success);
   } else {
@@ -101,30 +250,9 @@ async function deleteFile() {
     </div>
     <div v-if="bwa" class="pb-15">
       <div class="overflow-x-auto">
-        <table class="m-auto max-w-[763px] w-full border-collapse">
-          <thead>
-            <tr>
-              <th
-                v-for="(_value, key) in tableData[0]"
-                :key="key"
-                class="p-2 text-center border border-black bg-zinc-200"
-              >
-                {{ key }}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(row, index) in tableData" :key="index">
-              <td
-                v-for="(value, key) in row"
-                :key="key"
-                class="p-2 text-center border border-black"
-              >
-                {{ value }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        
+        <UTable class="m-auto max-w-[763px] w-full border-collapse " :rows="rows" />
+
       </div>
     </div>
     <p v-else class="pb-4 text-red-600 text-center">

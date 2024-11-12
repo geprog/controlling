@@ -1,4 +1,5 @@
 export type Bwa = {
+    /** Bezeichnung */
     name: string,
 
     /** Umsatzerlöse */
