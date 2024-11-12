@@ -1,28 +1,15 @@
 <script setup lang="ts">
 const route = useRoute();
-// modal state
 const isOpen = ref(false);
 
-const { data: bwa, error } = await useFetch(`/api/bwa/${route.params.bwaname}`);
+const { data: bwa, error } = await useFetch(`/api/bwa/${route.params.bwaname as string}`);
 
-type bwaObject = { [key: string]: string | number }[];
+const rows = bwa.value
+  ? Object.entries(bwa.value).map(([key, value]) => {
+    return [{ [key]: value }];
+  }) : [];
 
-const structuredBWA = bwa.value as bwaObject;
-
-const rows = structuredBWA
-  ? structuredBWA.map((el) => {
-      const x = Object.entries(el).map((ell) => {
-        const y = ell[0];
-        const z = ell[1];
-        return { [y]: z };
-      });
-      return x;
-    })
-  : [];
-
-const tableData = rows.map((itemArr) =>
-  itemArr.reduce((acc, curretobject) => ({ ...acc, ...curretobject }), {})
-);
+const columns = bwa.value ? Object.keys(bwa.value) : [];
 
 const toast = useToast();
 function notificationService(message: string, type: boolean) {
@@ -61,7 +48,7 @@ function notificationService(message: string, type: boolean) {
 
 async function deleteFile() {
   if (bwa.value) {
-    const response = await $fetch("/api/bwa/deleteFile", {
+    const response = await $fetch("/api/bwa/index.delete", {
       method: "POST",
       body: { fileName: route.params.bwaname },
     });
@@ -89,58 +76,26 @@ async function deleteFile() {
       </p>
     </div>
     <div class="flex justify-center gap-4 my-4">
-      <UButton
-        color="white"
-        size="md"
-        label="Zurück zur BWA Übersicht"
-        icon="i-heroicons-arrow-left"
-        @click="navigateTo('/bwa/collection')"
-      />
+      <UButton color="white" size="md" label="Zurück zur BWA Übersicht" icon="i-heroicons-arrow-left"
+        @click="navigateTo('/bwa/collection')" />
       <div v-if="bwa">
         <UTooltip text="Löschen" :popper="{ arrow: true, placement: 'right' }">
-          <UButton
-            color="red"
-            size="md"
-            icon="i-heroicons-trash"
-            @click="isOpen = true"
-          />
+          <UButton color="red" size="md" icon="i-heroicons-trash" @click="isOpen = true" />
         </UTooltip>
       </div>
     </div>
     <div>
-      <UModal
-        v-model="isOpen"
-        :overlay="false"
-        :transition="false"
-        prevent-close
-        :ui="{ width: 'w-46' }"
-      >
+      <UModal v-model="isOpen" :overlay="false" :transition="false" prevent-close :ui="{ width: 'w-46' }">
         <div class="px-4 pt-4 flex gap-2">
-          <UIcon
-            name="i-heroicons-exclamation-triangle"
-            class="text-red-600 p-"
-          />
+          <UIcon name="i-heroicons-exclamation-triangle" class="text-red-600 p-" />
           <p class="text-gray-600">Diese BWA wirklich löschen?</p>
         </div>
         <div class="p-4">
-          <UButton
-            color="red"
-            size="md"
-            label="Löschen"
-            icon="i-heroicons-trash"
-            :ui="{ container: 'w-4' }"
-            @click="
-              deleteFile().then(() => navigateTo('/bwa/collection') as Function)
-            "
-          />
-          <UButton
-            class="ml-4"
-            color="white"
-            size="md"
-            label="Abbrechen"
-            icon="i-heroicons-x-mark"
-            @click="isOpen = false"
-          />
+          <UButton color="red" size="md" label="Löschen" icon="i-heroicons-trash" :ui="{ container: 'w-4' }" @click="
+            deleteFile().then(() => navigateTo('/bwa/collection') as Function)
+            " />
+          <UButton class="ml-4" color="white" size="md" label="Abbrechen" icon="i-heroicons-x-mark"
+            @click="isOpen = false" />
         </div>
       </UModal>
     </div>
@@ -176,7 +131,7 @@ async function deleteFile() {
       {{
         error
           ? "Diese BWA existiert nicht! Vergewisser dich, dass der richtige Link verwendet wird | " +
-            error
+          error
           : "Ein unerwarteter Fehler ist aufgetreten, bitte melde, wenn möglich wie dieser Fehler aufgetreten ist"
       }}
     </p>
