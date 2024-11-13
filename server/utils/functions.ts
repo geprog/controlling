@@ -1,4 +1,4 @@
-import { Bwa, ExtendedBwa } from "~/server/types";
+import type { Bwa, ExtendedBwa } from "~/server/types";
 
 export function bwaFunctions(data: Bwa): ExtendedBwa {
     return {

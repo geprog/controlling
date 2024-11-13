@@ -1,155 +1,194 @@
 <script setup lang="ts">
-import type { Bwa } from '~/server/types';
 import { bwaFunctions } from '~/server/utils/functions';
-import { reactive, computed } from 'vue';
+import { computed } from 'vue';
 
 const route = useRoute();
 const isOpen = ref(false);
 
-const { data: bwa, error } = await useFetch(`/api/bwa/${route.params.bwaname as string}`);
+const { data: bwa, error } = await useFetch(`/api/bwa/${route.params.bwaname}`);
 
 const rows = computed(() => {
   if (!bwa.value) {
     return [];
-  }
-  let rows = [
-      {
-        name: "Bezeichnung",
-        value: bwa.value.name,
-      },
-      {
-        name: "Umsatzerlöse",
-        value: bwa.value.revenue,
-      },
-      {
-        name: "Bestandsveränderung FE/UE",
-        value: bwa.value.inventoryChange,
-      },
-      {
-        name: "Aktivierte Eigenleistungen",
-        value: bwa.value.ownWork,
-      },
-      {
-        name: "Gesamtleistung",
-        value: bwaFunctions(bwa.value).totalOutput()
-      },
-      {
-        name: "Material-/Wareneinkauf",
-        value: bwa.value.goodsPurchases,
-      },
-      {
-        name: "Rohertrag",
-        value: bwaFunctions(bwa.value).grossYield(),
-      },
-      {
-        name: "So. betr. Erlöse",
-        value: bwa.value.otherIncome,
-      },
-      {
-        name: "Betrieblicher Rohertrag",
-        value: bwaFunctions(bwa.value).operatingGrossYield(),
-      },
-      {
-        name: "Personalkosten",
-        value: bwa.value.personnelCosts,
-      },
-      {
-        name: "Raumkosten",
-        value: bwa.value.facilityCosts,
-      },
-      {
-        name: "Betriebliche Steuern",
-        value: bwa.value.operatingTaxes,
-      },
-      {
-        name: "Versicherungen/Beiträge",
-        value: bwa.value.insuranceCosts,
-      },
-      {
-        name: "Besondere Kosten",
-        value: bwa.value.specialCosts,
-      },
-      {
-        name: "Fahrzeugkosten (ohne Steuer)",
-        value: bwa.value.vehicleCosts,
-      },
-      {
-        name: "Werbe-/Reisekosten",
-        value: bwa.value.travelCosts,
-      },
-      {
-        name: "Kosten Warenabgabe",
-        value: bwa.value.soldGoodsCosts,
-      },
-      {
-        name: "Abschreibungen",
-        value: bwa.value.depreciation,
-      },
-      {
-        name: "Reparatur/Instandhaltung",
-        value: bwa.value.maintenance,
-      },
-      {
-        name: "Sonstige Kosten",
-        value: bwa.value.otherCosts,
-      },
-      {
-        name: "Gesamtkosten",
-        value: bwaFunctions(bwa.value).totalCosts(),
-      },
-      {
-        name: "Betriebsergebnis",
-        value: bwaFunctions(bwa.value).operatingResult(),
-      },
-      {
-        name: "Zinsaufwand",
-        value: bwa.value.interestExpense,
-      },
-      {
-        name: "Sonstiger neutraler Aufwand",
-        value: bwa.value.otherNeutralExpenses,
-      },
-      {
-        name: "Neutraler Aufwand",
-        value: bwaFunctions(bwa.value).nonOperatingExpenses(),
-      },
-      {
-        name: "Zinserträge",
-        value: bwa.value.interestIncome,
-      },
-      {
-        name: "Sonstiger neutraler Ertrag",
-        value: bwa.value.otherNeutralIncome,
-      },
-      {
-        name: "Verrechnete kalk. Kosten",
-        value: bwa.value.calculatedImputedCosts,
-      },
-      {
-        name: "Neutraler Ertrag",
-        value: bwaFunctions(bwa.value).nonOperatingIncome(),
-      },
-      {
-        name: "Kontenklasse unbesetzt",
-        value: bwa.value.accountClassUnassigned,
-      },
-      {
-        name: "Ergebnis vor Steuern",
-        value: bwaFunctions(bwa.value).earningsBeforeTaxes(),
-      },
-      {
-        name: "Steuern Einkommen u. Ertrag",
-        value: bwa.value.incomeTaxes
-      },
-      {
-        name: "Vorläufiges Ergebnis",
-        value: bwaFunctions(bwa.value).earningsAfterTaxes(),
-      }
-    ];
+  };
+
+  const extendedBwa = bwaFunctions(bwa.value);
+
+
+  const rows = [
+    {
+      name: "Bezeichnung",
+      value: bwa.value.name,
+      value2: ""
+    },
+    {
+      name: "Umsatzerlöse",
+      value: bwa.value.revenue,
+      value2: ""
+    },
+    {
+      name: "Bestandsveränderung FE/UE",
+      value: bwa.value.inventoryChange,
+      value2: ""
+    },
+    {
+      name: "Aktivierte Eigenleistungen",
+      value: bwa.value.ownWork,
+      value2: ""
+    },
+    {
+      name: "Gesamtleistung",
+      value: extendedBwa.totalOutput(),
+      value2: ""
+    },
+    {
+      name: "Material-/Wareneinkauf",
+      value: bwa.value.goodsPurchases,
+      value2: ""
+    },
+    {
+      name: "Rohertrag",
+      value: extendedBwa.grossYield(),
+      value2: ""
+    },
+    {
+      name: "So. betr. Erlöse",
+      value: bwa.value.otherIncome,
+      value2: ""
+    },
+    {
+      name: "Betrieblicher Rohertrag",
+      value: extendedBwa.operatingGrossYield(),
+      value2: ""
+    },
+    {
+      name: "Personalkosten",
+      value: bwa.value.personnelCosts,
+      value2: ""
+    },
+    {
+      name: "Raumkosten",
+      value: bwa.value.facilityCosts,
+      value2: ""
+    },
+    {
+      name: "Betriebliche Steuern",
+      value: bwa.value.operatingTaxes,
+      value2: ""
+    },
+    {
+      name: "Versicherungen/Beiträge",
+      value: bwa.value.insuranceCosts,
+      value2: ""
+    },
+    {
+      name: "Besondere Kosten",
+      value: bwa.value.specialCosts,
+      value2: ""
+    },
+    {
+      name: "Fahrzeugkosten (ohne Steuer)",
+      value: bwa.value.vehicleCosts,
+      value2: ""
+    },
+    {
+      name: "Werbe-/Reisekosten",
+      value: bwa.value.travelCosts,
+      value2: ""
+    },
+    {
+      name: "Kosten Warenabgabe",
+      value: bwa.value.soldGoodsCosts,
+      value2: ""
+    },
+    {
+      name: "Abschreibungen",
+      value: bwa.value.depreciation,
+      value2: ""
+    },
+    {
+      name: "Reparatur/Instandhaltung",
+      value: bwa.value.maintenance,
+      value2: ""
+    },
+    {
+      name: "Sonstige Kosten",
+      value: bwa.value.otherCosts,
+      value2: ""
+    },
+    {
+      name: "Gesamtkosten",
+      value: extendedBwa.totalCosts(),
+      value2: ""
+    },
+    {
+      name: "Betriebsergebnis",
+      value: extendedBwa.operatingResult(),
+      value2: ""
+    },
+    {
+      name: "Zinsaufwand",
+      value: bwa.value.interestExpense,
+      value2: ""
+    },
+    {
+      name: "Sonstiger neutraler Aufwand",
+      value: bwa.value.otherNeutralExpenses,
+      value2: ""
+    },
+    {
+      name: "Neutraler Aufwand",
+      value: extendedBwa.nonOperatingExpenses(),
+      value2: ""
+    },
+    {
+      name: "Zinserträge",
+      value: bwa.value.interestIncome,
+      value2: ""
+    },
+    {
+      name: "Sonstiger neutraler Ertrag",
+      value: bwa.value.otherNeutralIncome,
+      value2: ""
+    },
+    {
+      name: "Verrechnete kalk. Kosten",
+      value: bwa.value.calculatedImputedCosts,
+      value2: ""
+    },
+    {
+      name: "Neutraler Ertrag",
+      value: extendedBwa.nonOperatingIncome(),
+      value2: ""
+    },
+    {
+      name: "Kontenklasse unbesetzt",
+      value: bwa.value.accountClassUnassigned,
+      value2: ""
+    },
+    {
+      name: "Ergebnis vor Steuern",
+      value: extendedBwa.earningsBeforeTaxes(),
+      value2: ""
+    },
+    {
+      name: "Steuern Einkommen u. Ertrag",
+      value: bwa.value.incomeTaxes,
+      value2: ""
+    },
+    {
+      name: "Vorläufiges Ergebnis",
+      value: extendedBwa.earningsAfterTaxes(),
+      value2: ""
+    }
+  ];
   rows.forEach(row => {
-      row.value = row.value.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
+    if (typeof row.value === "number" && bwa.value) {
+      row.value2 = `${(100 / bwa.value.revenue * row.value).toFixed(2)}%`;
+    }
+    row.value = row.value.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
   });
-  return rows; 
+  return rows;
 });
 
 const toast = useToast();
